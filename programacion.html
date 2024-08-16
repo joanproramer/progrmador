@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editor en línea - HTML/CSS/JavaScript</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.12/codemirror.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="editor-container">
+        <div class="editor">
+            <h2>HTML</h2>
+            <textarea id="html-editor"></textarea>
+            <button onclick="downloadFile('html')">Descargar HTML</button>
+            <input type="file" id="html-upload" accept=".html,.pm" onchange="loadFile('html')">
+        </div>
+        <div class="editor">
+            <h2>CSS</h2>
+            <textarea id="css-editor"></textarea>
+            <button onclick="downloadFile('css')">Descargar CSS</button>
+            <input type="file" id="css-upload" accept=".css,.pm" onchange="loadFile('css')">
+        </div>
+        <div class="editor">
+            <h2>JavaScript</h2>
+            <textarea id="js-editor"></textarea>
+            <button onclick="downloadFile('js')">Descargar JS</button>
+            <input type="file" id="js-upload" accept=".js,.pm" onchange="loadFile('js')">
+        </div>
+    </div>
+    <div class="preview-container">
+        <h2>Vista Previa</h2>
+        <iframe id="preview"></iframe>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.12/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.12/mode/xml/xml.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.12/mode/css/css.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.12/mode/javascript/javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.12/mode/htmlmixed/htmlmixed.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
