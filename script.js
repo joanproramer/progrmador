@@ -1,81 +1,97 @@
-document.addEventListener("DOMContentLoaded", function () {
-    const htmlEditor = CodeMirror.fromTextArea(document.getElementById("html-editor"), {
-        mode: "htmlmixed",
-        lineNumbers: true,
-        theme: "default"
-    });
+let clearIntervalId = null;
 
-    const cssEditor = CodeMirror.fromTextArea(document.getElementById("css-editor"), {
-        mode: "css",
-        lineNumbers: true,
-        theme: "default"
-    });
+function appendToDisplay(value) {
+    document.getElementById('display').value += value;
+}
 
-    const jsEditor = CodeMirror.fromTextArea(document.getElementById("js-editor"), {
-        mode: "javascript",
-        lineNumbers: true,
-        theme: "default"
-    });
+function clearDisplay() {
+    document.getElementById('display').value = '';
+}
 
-    function updatePreview() {
-        const htmlContent = htmlEditor.getValue();
-        const cssContent = `<style>${cssEditor.getValue()}</style>`;
-        const jsContent = `<script>${jsEditor.getValue()}<\/script>`;
+function backspace() {
+    let display = document.getElementById('display');
+    display.value = display.value.slice(0, -1);
+}
 
-        const previewFrame = document.getElementById("preview");
-        const preview = previewFrame.contentDocument || previewFrame.contentWindow.document;
-        preview.open();
-        preview.write(htmlContent + cssContent + jsContent);
-        preview.close();
+function calculate() {
+    try {
+        let expression = document.getElementById('display').value;
+        // Reemplaza las funciones matemáticas con su implementación en JavaScript
+        expression = expression.replace(/Math.sin\(([^)]+)\)/g, 'Math.sin($1)');
+        expression = expression.replace(/Math.cos\(([^)]+)\)/g, 'Math.cos($1)');
+        expression = expression.replace(/Math.tan\(([^)]+)\)/g, 'Math.tan($1)');
+        expression = expression.replace(/Math.log\(([^)]+)\)/g, 'Math.log10($1)');
+        expression = expression.replace(/Math.exp\(([^)]+)\)/g, 'Math.exp($1)');
+        expression = expression.replace(/Math.PI/g, 'Math.PI');
+        expression = expression.replace(/Math.E/g, 'Math.E');
+        // Evaluar la expresión con eval
+        document.getElementById('display').value = eval(expression);
+    } catch (e) {
+        document.getElementById('display').value = 'Error';
     }
+}
 
-    htmlEditor.on("change", updatePreview);
-    cssEditor.on("change", updatePreview);
-    jsEditor.on("change", updatePreview);
-    
-    updatePreview(); // Initial preview update
+function calculateSquareRoot() {
+    try {
+        let value = parseFloat(document.getElementById('display').value);
+        if (isNaN(value)) throw 'Error';
+        document.getElementById('display').value = Math.sqrt(value);
+    } catch (e) {
+        document.getElementById('display').value = 'Error';
+    }
+}
 
-    // Función para descargar el contenido del editor en un archivo con extensión .pm
-    window.downloadFile = function(type) {
-        let content, fileName;
-        if (type === 'html') {
-            content = htmlEditor.getValue();
-            fileName = 'index_html.pm';
-        } else if (type === 'css') {
-            content = cssEditor.getValue();
-            fileName = 'styles_css.pm';
-        } else if (type === 'js') {
-            content = jsEditor.getValue();
-            fileName = 'script_js.pm';
+function calculatePower() {
+    let expression = document.getElementById('display').value;
+    if (!expression.includes('^')) return;
+    let [base, exponent] = expression.split('^').map(Number);
+    if (isNaN(base) || isNaN(exponent)) {
+        document.getElementById('display').value = 'Error';
+        return;
+    }
+    document.getElementById('display').value = Math.pow(base, exponent);
+}
+
+function calculateLog() {
+    try {
+        let value = parseFloat(document.getElementById('display').value);
+        if (isNaN(value)) throw 'Error';
+        document.getElementById('display').value = Math.log10(value);
+    } catch (e) {
+        document.getElementById('display').value = 'Error';
+    }
+}
+
+function calculateExp() {
+    try {
+        let value = parseFloat(document.getElementById('display').value);
+        if (isNaN(value)) throw 'Error';
+        document.getElementById('display').value = Math.exp(value);
+    } catch (e) {
+        document.getElementById('display').value = 'Error';
+    }
+}
+
+function calculateFactorial() {
+    try {
+        let value = parseInt(document.getElementById('display').value, 10);
+        if (isNaN(value) || value < 0) throw 'Error';
+        let result = 1;
+        for (let i = 1; i <= value; i++) {
+            result *= i;
         }
+        document.getElementById('display').value = result;
+    } catch (e) {
+        document.getElementById('display').value = 'Error';
+    }
+}
 
-        const blob = new Blob([content], { type: "text/plain;charset=utf-8" });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = fileName;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-    };
+function startClear() {
+    clearIntervalId = setInterval(clearDisplay, 100); // Borra cada 100ms mientras se mantiene presionado
+}
 
-    // Función para cargar el contenido desde un archivo
-    window.loadFile = function(type) {
-        const fileInput = document.getElementById(`${type}-upload`);
-        const file = fileInput.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                if (type === 'html') {
-                    htmlEditor.setValue(e.target.result);
-                } else if (type === 'css') {
-                    cssEditor.setValue(e.target.result);
-                } else if (type === 'js') {
-                    jsEditor.setValue(e.target.result);
-                }
-                updatePreview();
-            };
-            reader.readAsText(file);
-        }
-    };
-});
+function stopClear() {
+    clearInterval(clearIntervalId);
+    clearIntervalId = null;
+}
+1

@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generador de Colores y Combinaciones</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+        }
+
+        #colorContainer {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .colorBox {
+            width: 50px;
+            height: 50px;
+            margin: 5px;
+            border-radius: 50%;
+            display: inline-block;
+            cursor: pointer;
+        }
+
+        .colorInfo {
+            margin-top: 20px;
+        }
+
+        .colorName {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        #colorDisplay {
+            width: 100%;
+            height: 200px;
+            margin-top: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+        }
+
+        #colorCode {
+            font-size: 24px;
+            margin-top: 10px;
+        }
+
+        #combination {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+
+        button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>Generador de Colores y Combinaciones</h1>
+    <p>Haz clic en un color para ver su código hexadecimal, su vista previa y combinaciones básicas para obtener ese color.</p>
+
+    <div id="colorContainer"></div>
+
+    <div class="colorInfo">
+        <div id="colorDisplay"></div>
+        <div id="colorCode"></div>
+        <div id="combination"></div>
+    </div>
+
+    <button onclick="reset()">Reiniciar</button>
+
+    <script>
+        const colorCombinations = {
+            "Red": "Rojo puro.",
+            "Green": "Verde puro.",
+            "Blue": "Azul puro.",
+            "Yellow": "Rojo + Verde.",
+            "Cyan": "Verde + Azul.",
+            "Magenta": "Rojo + Azul.",
+            "White": "Rojo + Verde + Azul.",
+            "Black": "Ningún color.",
+            "Orange": "Rojo + Amarillo.",
+            "Purple": "Rojo + Azul.",
+            "Pink": "Rojo + Blanco.",
+            "Brown": "Rojo + Verde + Azul + un poco de negro.",
+            "Gray": "Blanco + Negro.",
+            "Lime": "Verde + Blanco.",
+            "Maroon": "Rojo + Negro.",
+            "Olive": "Verde + Marrón.",
+            "Navy": "Azul + Negro.",
+            "Teal": "Verde + Azul + Gris.",
+            "Silver": "Gris + Blanco.",
+            "Aqua": "Cian.",
+            "Beige": "Blanco + Marrón.",
+            "Coral": "Naranja + Rojo.",
+            "Crimson": "Rojo + Azul.",
+            "Fuchsia": "Rojo + Azul.",
+            "Gold": "Amarillo + Naranja.",
+            "Indigo": "Azul + Púrpura.",
+            "Ivory": "Blanco + un toque de amarillo.",
+            "Khaki": "Beige + Marrón.",
+            "Lavender": "Blanco + Púrpura.",
+            "Moccasin": "Naranja + Beige.",
+            "Orchid": "Púrpura + Rosa.",
+            "Plum": "Púrpura + Rojo.",
+            "Salmon": "Rosa + Naranja.",
+            "Sienna": "Marrón + Rojo.",
+            "Turquoise": "Cian + Verde.",
+            "Violet": "Púrpura + Azul.",
+            "Charcoal": "Gris oscuro.",
+            "Mint": "Verde + Blanco.",
+            "Wheat": "Beige + un toque de amarillo.",
+            "Tomato": "Rojo + Naranja.",
+            "RoyalBlue": "Azul + un toque de púrpura.",
+            "SkyBlue": "Azul claro + Blanco.",
+            "SlateGray": "Gris + Azul.",
+            "CadetBlue": "Azul + Gris.",
+            "Chocolate": "Marrón + un toque de naranja.",
+            "DarkOrange": "Naranja + Rojo oscuro.",
+            "MediumPurple": "Púrpura + Gris claro.",
+            "LightGreen": "Verde + Blanco.",
+            "ForestGreen": "Verde oscuro + un toque de marrón.",
+            "DarkViolet": "Púrpura oscuro + Azul.",
+            "LightPink": "Rosa + Blanco.",
+            "RoyalPurple": "Púrpura + Azul.",
+            "DeepSkyBlue": "Azul claro + un toque de verde.",
+            // Puedes añadir más colores aquí.
+        };
+
+        // Añadir colores al contenedor
+        const colorContainer = document.getElementById('colorContainer');
+        Object.keys(colorCombinations).forEach(colorName => {
+            const colorBox = document.createElement('div');
+            colorBox.className = 'colorBox';
+            colorBox.style.backgroundColor = colorName;
+            colorBox.title = colorName;
+            colorBox.onclick = () => displayColorInfo(colorName);
+            colorContainer.appendChild(colorBox);
+        });
+
+        function displayColorInfo(colorName) {
+            var colorDisplay = document.getElementById('colorDisplay');
+            var colorCode = document.getElementById('colorCode');
+            var combination = document.getElementById('combination');
+
+            // Aplica el color ingresado
+            colorDisplay.style.backgroundColor = colorName;
+
+            // Obtiene el código hexadecimal del color usando una función de ayuda
+            var hexColor = rgbToHex(getComputedStyle(colorDisplay).backgroundColor);
+
+            // Muestra el código hexadecimal del color
+            colorCode.textContent = 'Código Hexadecimal: ' + hexColor;
+
+            // Muestra la combinación de colores
+            combination.textContent = colorCombinations[colorName] || 'Combinación no disponible para este color.';
+        }
+
+        function reset() {
+            document.getElementById('colorDisplay').style.backgroundColor = '';
+            document.getElementById('colorCode').textContent = '';
+            document.getElementById('combination').textContent = '';
+        }
+
+        // Función para convertir RGB a Hexadecimal
+        function rgbToHex(rgb) {
+            var rgbValues = rgb.match(/\d+/g).map(Number);
+            return "#" + rgbValues.map(function(value) {
+                return ("0" + value.toString(16)).slice(-2);
+            }).join("");
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editor de Código</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: #f0f0f0;
+        }
+        #editor {
+            width: 80%;
+            height: 300px;
+            margin: 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 10px;
+            background: #fff;
+        }
+        #output {
+            width: 80%;
+            height: 300px;
+            margin: 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background: #fff;
+            overflow-y: auto;
+        }
+        button {
+            margin: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>Editor de Código en Vivo</h1>
+    <textarea id="editor" placeholder="Escribe tu código HTML/CSS/JavaScript aquí..."></textarea>
+    <button onclick="runCode()">Ejecutar</button>
+    <iframe id="output"></iframe>
+
+    <script>
+        function runCode() {
+            const code = document.getElementById('editor').value;
+            const output = document.getElementById('output');
+            output.srcdoc = code;
+        }
+    </script>
+</body>
+</html>

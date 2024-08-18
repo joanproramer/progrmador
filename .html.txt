@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cuenta Regresiva Personalizada</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 50px;
+        }
+        input {
+            margin: 10px;
+            padding: 10px;
+            font-size: 1em;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 1em;
+            cursor: pointer;
+        }
+        #contador {
+            font-size: 2em;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Cuenta Regresiva Personalizada</h1>
+    <form id="fecha-form">
+        <label for="fecha-actual">Fecha Actual:</label>
+        <input type="date" id="fecha-actual" required>
+        <br>
+        <label for="fecha-evento">Fecha del Evento:</label>
+        <input type="date" id="fecha-evento" required>
+        <br>
+        <button type="submit">Calcular Tiempo Restante</button>
+    </form>
+    <div id="contador"></div>
+
+    <script>
+        document.getElementById('fecha-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            const fechaActual = new Date(document.getElementById('fecha-actual').value);
+            const fechaEvento = new Date(document.getElementById('fecha-evento').value);
+            
+            if (fechaActual >= fechaEvento) {
+                document.getElementById('contador').innerHTML = 'La fecha del evento debe ser posterior a la fecha actual.';
+                return;
+            }
+            
+            function actualizarContador() {
+                const ahora = new Date();
+                const diferencia = fechaEvento - ahora;
+                
+                if (diferencia <= 0) {
+                    document.getElementById('contador').innerHTML = '¡El evento ha llegado!';
+                    return;
+                }
+                
+                const dias = Math.floor(diferencia / (1000 * 60 * 60 * 24));
+                const horas = Math.floor((diferencia % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutos = Math.floor((diferencia % (1000 * 60 * 60)) / (1000 * 60));
+                const segundos = Math.floor((diferencia % (1000 * 60)) / 1000);
+                
+                document.getElementById('contador').innerHTML = 
+                    `${dias} días, ${horas} horas, ${minutos} minutos, ${segundos} segundos`;
+            }
+
+            // Actualizar el contador cada segundo
+            setInterval(actualizarContador, 1000);
+            actualizarContador(); // Inicializar inmediatamente
+        });
+    </script>
+</body>
+</html>
